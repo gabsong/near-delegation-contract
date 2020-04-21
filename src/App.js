@@ -1,9 +1,26 @@
 import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
-import Transfer from './Transfer';
-import logo from './assets/logo.svg';
+import 'antd/dist/antd.css';
+import {
+  Typography,
+  Layout,
+  Space,
+  Row,
+  Col,
+  Menu,
+  Tabs,
+  List,
+  Card,
+  Divider,
+  Button
+} from 'antd';
+import {
+  UserOutlined,
+  HomeOutlined,
+  PartitionOutlined,
+  HeartTwoTone
+} from '@ant-design/icons';
 import nearlogo from './assets/gray_near_logo.svg';
-import near from './assets/near.svg';
 import './App.css';
 
 class App extends Component {
@@ -11,7 +28,18 @@ class App extends Component {
     super(props);
     this.state = {
       login: false,
-      speech: null
+      speech: null,
+      balance: '',
+      validators: [
+        {
+          accountId: 'nuc.test',
+          active: true
+        },
+        {
+          accountId: 'pepper.test',
+          active: false
+        }
+      ]
     }
     this.signedInFlow = this.signedInFlow.bind(this);
     this.requestSignIn = this.requestSignIn.bind(this);
@@ -20,7 +48,7 @@ class App extends Component {
     this.changeGreeting = this.changeGreeting.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     let loggedIn = this.props.wallet.isSignedIn();
     if (loggedIn) {
       this.signedInFlow();
@@ -29,7 +57,7 @@ class App extends Component {
     }
   }
 
-  async signedInFlow() {
+  async signedInFlow () {
     console.log("come in sign in flow")
     this.setState({
       login: true,
@@ -41,12 +69,12 @@ class App extends Component {
     await this.welcome();
   }
 
-  async welcome() {
+  async welcome () {
     const response = await this.props.contract.welcome({ account_id: accountId });
-    this.setState({speech: response.text});
+    this.setState({ speech: response.text });
   }
 
-  async requestSignIn() {
+  async requestSignIn () {
     const appTitle = 'NEAR React template';
     await this.props.wallet.requestSignIn(
       window.nearConfig.contractName,
@@ -54,18 +82,18 @@ class App extends Component {
     )
   }
 
-  requestSignOut() {
+  requestSignOut () {
     this.props.wallet.signOut();
     setTimeout(this.signedOutFlow, 500);
     console.log("after sign out", this.props.wallet.isSignedIn())
   }
 
-  async changeGreeting() {
+  async changeGreeting () {
     await this.props.contract.setGreeting({ message: 'howdy' });
     await this.welcome();
   }
 
-  signedOutFlow() {
+  signedOutFlow () {
     if (window.location.search.includes("account_id")) {
       window.location.replace(window.location.origin + window.location.pathname)
     }
@@ -75,44 +103,98 @@ class App extends Component {
     })
   }
 
-  render() {
-    let style = {
-      fontSize: "1.5rem",
-      color: "#0072CE",
-      textShadow: "1px 1px #D1CCBD"
-    }
+  render () {
+    const { Header, Footer, Sider, Content } = Layout;
+    const { Title, Paragraph, Text } = Typography;
     return (
-      <React.Fragment>
-        <div>
-          {/* add menu component only if login is true */}
-        </div>
-        <div>
-          <div className="App-header">
-            <div className="image-wrapper">
+      <Layout>
+        <Header id="top-nav" style={{ padding: 0 }}>
+          <Menu theme="light" mode="horizontal">
+            <Menu.Item disabled>
               <img className="logo" src={nearlogo} alt="NEAR logo" />
-              <p style={style}>{this.state.speech}</p>
-            </div>
-            <div>
-              {this.state.login ? 
-                <div>
-                  <div>
-                    <button onClick={this.changeGreeting}>Change greeting</button>
-                  </div>
-                  <div className="Transfer-module">
-                    <Transfer />
-                  </div>
-                  <div>
-                    <button onClick={this.requestSignOut}>Log out</button>
-                  </div>
-                </div>
-                : <button onClick={this.requestSignIn}>Log in with NEAR</button>}
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
+            </Menu.Item>
+          </Menu>
+          {this.state.login && <Menu theme="light" mode="horizontal">
+            <Menu.SubMenu
+              key="profile"
+              title={
+                <span>
+                  <UserOutlined />
+                  <span>user.id</span>
+                </span>
+              }
+            >
+              <Menu.Item onClick={this.requestSignOut}>
+                Sign Out
+              </Menu.Item>
+            </Menu.SubMenu>
+          </Menu>}
+        </Header>
+        <Layout hasSider="true">
+          <Sider>
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']}>
+              <Menu.Item key="home">
+                <HomeOutlined />
+                <span className="nav-text">Home</span>
+              </Menu.Item>
+              <Menu.Item key="validators">
+                <PartitionOutlined />
+                <span className="nav-text">Validators</span>
+              </Menu.Item>
+            </Menu>
+          </Sider>
+          <Layout className="main">
+            {this.state.login ?
+              <Content style={{ padding: '24px 24px' }}>
+                <Row>
+                  <Col span={12} flex="0 1 480px">
+                    <Card title="My Balance">
+                      <Title level={2}><span>{this.state.balance} </span>NEAR</Title>
+                      <p>{this.state.speech}</p>
+                      <Button type="primary" onClick={this.changeGreeting}>Change greeting</Button>
+                    </Card>
+                  </Col>
+                  <Col flex="auto"></Col>
+                </Row>
+                <Row>
+                  <Col span={12} flex="0 1 480px">
+                    <Tabs defaultActiveKey="0">
+                      <Tabs.TabPane tab="Active Validators" key="0">
+                        <List 
+                          bordered
+                          style={{ padding: '8px 0 8px 0' }}
+                          itemLayout="vertical"
+                          dataSource={this.state.validators}
+                          renderItem={(validator) => (
+                            <List.Item key={validator.accountId} style={{ padding: '8px 16px 8px 16px' }}>
+                              <Card title={validator.accountId}>card content</Card>
+                            </List.Item>
+                          )}
+                        />
+                      </Tabs.TabPane>
+                      <Tabs.TabPane tab="Available Validators" key="1">
+                        <List bordered />
+                      </Tabs.TabPane>
+                    </Tabs>
+                  </Col>
+                  <Col flex="auto"></Col>
+                </Row>
+              </Content>
+              : 
+              <Content className="unauthorized">
+                <Button type="primary" onClick={this.requestSignIn}>Log in with NEAR</Button>
+              </Content>
+            }
+            <Footer>
+              <Title level={4}>
+                prototyped with <HeartTwoTone twoToneColor="#df5f6a" /> by @gabsong
+              </Title>
+            </Footer>
+          </Layout>
+        </Layout>
+      </Layout>
     )
   }
-
 }
 
 export default App;

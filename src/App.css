@@ -1,3 +1,31 @@
+.unauthorized {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.logo {
+  display: block;
+  height: 60px;
+}
+
+#top-nav {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  min-height: 100vh;
+}
+
+/* 
 .App-header {
   background-image: url('https://nearprotocol.com/wp-content/uploads/2019/03/illo-developers.svg');
   min-height: 100vh;
@@ -69,4 +97,5 @@ button:hover {
   cursor: pointer;
   color: white;
   background: #0072CE;
-} 
+}
+*/

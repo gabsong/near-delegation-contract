@@ -1,4 +1,4 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME ||'near-token-delegator';
+const CONTRACT_NAME = process.env.CONTRACT_NAME ||'near-delegation-contract';
 
 function getConfig(env) {
     switch (env) {

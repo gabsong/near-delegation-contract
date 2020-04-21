@@ -1,5 +1,5 @@
 {
-  "name": "near-token-delegator",
+  "name": "near-delegation-contract",
   "version": "0.1.0",
   "scripts": {
     "build": "npm run build:contract && npm run build:web",
