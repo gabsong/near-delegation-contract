@@ -9,6 +9,8 @@ import {
   Col,
   Menu,
   Tabs,
+  Form,
+  Input,
   List,
   Card,
   Divider,
@@ -29,7 +31,7 @@ class App extends Component {
     this.state = {
       login: false,
       speech: null,
-      balance: '',
+      balance: '500',
       validators: [
         {
           accountId: 'nuc.test',
@@ -75,7 +77,7 @@ class App extends Component {
   }
 
   async requestSignIn () {
-    const appTitle = 'NEAR React template';
+    const appTitle = 'NEAR Delegator';
     await this.props.wallet.requestSignIn(
       window.nearConfig.contractName,
       appTitle
@@ -146,38 +148,61 @@ class App extends Component {
           <Layout className="main">
             {this.state.login ?
               <Content style={{ padding: '24px 24px' }}>
-                <Row>
-                  <Col span={12} flex="0 1 480px">
+                <Row gutter={[24, 24]}>
+                  <Col span={12}>
                     <Card title="My Balance">
                       <Title level={2}><span>{this.state.balance} </span>NEAR</Title>
                       <p>{this.state.speech}</p>
                       <Button type="primary" onClick={this.changeGreeting}>Change greeting</Button>
                     </Card>
                   </Col>
-                  <Col flex="auto"></Col>
+                  <Col span={12}></Col>
                 </Row>
-                <Row>
-                  <Col span={12} flex="0 1 480px">
+                <Row gutter={[24, 24]}>
+                  <Col span={12}>
                     <Tabs defaultActiveKey="0">
                       <Tabs.TabPane tab="Active Validators" key="0">
                         <List 
-                          bordered
-                          style={{ padding: '8px 0 8px 0' }}
                           itemLayout="vertical"
                           dataSource={this.state.validators}
                           renderItem={(validator) => (
-                            <List.Item key={validator.accountId} style={{ padding: '8px 16px 8px 16px' }}>
+                            <List.Item key={validator.accountId} style={{ padding: '0 0 8px 0' }}>
                               <Card title={validator.accountId}>card content</Card>
                             </List.Item>
                           )}
                         />
                       </Tabs.TabPane>
                       <Tabs.TabPane tab="Available Validators" key="1">
-                        <List bordered />
+                        <List/>
                       </Tabs.TabPane>
                     </Tabs>
                   </Col>
-                  <Col flex="auto"></Col>
+                  <Col span={12}>
+                    <Tabs defaultActiveKey="0">
+                      <Tabs.TabPane tab="Deposit" key="0">
+                        <Card title="Deposit">
+                          <Form 
+                            layout="inline"
+                            name="deposit_form"
+                            // onFinish={onSubmitDeposit}
+                          >
+                            <Form.Item>
+                              <Input size="large" placeholder="0" />
+                            </Form.Item>
+                            <Form.Item>
+                              <Button size="large" type="primary" htmlType="submit">
+                                Deposit NEAR
+                              </Button>
+                            </Form.Item>
+                          </Form>
+                        </Card>
+                      </Tabs.TabPane>
+                      <Tabs.TabPane tab="Withdraw" key="1">
+                        <Card title="Withdraw">
+                        </Card>
+                      </Tabs.TabPane>
+                    </Tabs>
+                  </Col>
                 </Row>
               </Content>
               : 

@@ -8,6 +8,7 @@ import * as nearlib from 'near-api-js';
 async function initContract() {
     window.nearConfig = getConfig(process.env.NODE_ENV || 'development')
     console.log("nearConfig", window.nearConfig);
+    console.log('nearlib:', nearlib); // Remove
 
     // Initializing connection to the NEAR DevNet.
     window.near = await nearlib.connect(Object.assign({ deps: { keyStore: new nearlib.keyStores.BrowserLocalStorageKeyStore() } }, window.nearConfig));
