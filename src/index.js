@@ -6,8 +6,9 @@ import * as nearlib from 'near-api-js';
 
 // Initializing contract
 async function initContract() {
-    window.nearConfig = getConfig(process.env.NODE_ENV || 'betanet')
+    window.nearConfig = getConfig(process.env.NODE_ENV || 'development')
     console.log("nearConfig", window.nearConfig);
+    window.nearlib = nearlib;
     console.log('nearlib:', nearlib); // Remove
 
     // Initializing connection to the NEAR DevNet.
