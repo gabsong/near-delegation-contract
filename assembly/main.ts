@@ -24,3 +24,16 @@ export function setGreeting(message: string): void {
 function printString(s: string): string {
   return s;
 }
+
+// Our Delegator smart contract can make use of the following functionality
+
+// viewMethods
+// 1. get total amount staked in the validator's contract (general info)
+// 2. get total amount staked in the validator's contract by the user (personalized info)
+
+// changeMethods
+// 1. deposit amount from sender wallet into the validator's contract
+//    stake (lock) amount deposited, which should be instant, into the validator's contract
+
+// 2. unstake (unlock) any amount up to deposited amount, which should take 3 epochs
+//    from the validator's contract, and then, withdraw to the user's wallet

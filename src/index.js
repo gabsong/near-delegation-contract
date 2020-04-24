@@ -8,7 +8,7 @@ import * as nearlib from 'near-api-js';
 async function initContract() {
     window.nearConfig = getConfig(process.env.NODE_ENV || 'development')
     console.log("nearConfig", window.nearConfig);
-    window.nearlib = nearlib;
+    window.nearlib = nearlib; // Remove
     console.log('nearlib:', nearlib); // Remove
 
     // Initializing connection to the NEAR DevNet.
@@ -37,3 +37,17 @@ window.nearInitPromise = initContract().then(() => {
     document.getElementById('root')
   );
 }).catch(console.error)
+
+
+// Notes
+// do not attach references to nearAPI, contract, or wallet to the window global object
+// when deploying to production
+
+// is there a reason initContract has to execute first and render on success?
+// should I just render the login page first?
+
+// this snippet on DevTools gives me the user's wallet balance
+// contract.account.state().then(state => {
+//   let balance = nearlib.utils.format.formatNearAmount(state.amount, 2)
+//   console.log(balance) // logs 500.00 NEAR
+// })
