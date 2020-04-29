@@ -14,6 +14,11 @@ export default class App extends Component {
     super(props);
     this.state = {
       login: false,
+      loading: true,
+      validators: data,
+      route: 'validators',
+      stakes: [data[0]],
+      // for Context API
       signIn: () => {
         console.log('setState invoked, signIn', this);
         this.setState(({ login }) => {
@@ -31,9 +36,6 @@ export default class App extends Component {
           }
         });
       },
-      loading: true,
-      validators: data,
-      route: 'validators'
     };
 
     // this bindings
@@ -86,7 +88,7 @@ export default class App extends Component {
   }
 
   render () {
-    const { login, validators } = this.state;
+    const { login, validators, stakes } = this.state;
     
     return (
       <Layout>
@@ -101,6 +103,7 @@ export default class App extends Component {
             <MainContent
               login={login}
               validators={validators}
+              stakes={stakes}
             />
           </div>
         </Content>

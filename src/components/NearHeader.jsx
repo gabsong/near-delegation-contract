@@ -38,6 +38,7 @@ export default function NearHeader (props) {
         }
         {!login &&
           <Button 
+            className="btn-custom"
             id="login"
             type="primary"
             size="large"
