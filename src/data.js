@@ -113,7 +113,7 @@ module.exports = [
   },
   {
     "account": "infstones.test",
-    "name": "InfSotnes",
+    "name": "InfStones",
     "logo": "",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ultrices erat lacus, in feugiat dui pellentesque sit amet. Praesent at lectus accumsan, semper elit quis.",
     "about": "Delegate your stakes to the validator HashQuark to get rewards.HashQuark is deeply involved in the construction of the public blockchains, running supernodes and providing infrastructure and services.",

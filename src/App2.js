@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AuthProvider } from './context/Auth';
 import NearHeader from './components/NearHeader';
-import ValidatorsList from './components/ValidatorsList';
+import MainContent from './components/MainContent';
 import NearFooter from './components/NearFooter';
-import { Layout, Avatar } from 'antd';
+import { Layout } from 'antd';
 import 'antd/dist/antd.min.css';
 import data from './data';
 import './App2.css';
 const { Content, Footer } = Layout;
 
-class App extends Component {
+export default class App extends Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -87,28 +86,33 @@ class App extends Component {
   }
 
   render () {
-    const { login, signIn, signOut, route, validators } = this.state;
+    const { login, validators } = this.state;
     
     return (
-      <AuthProvider value={ login, signIn, signOut }>
-        <Layout>
-          <NearHeader title="Staking Rewards" requestSignIn={this.requestSignIn}/>
-          <Content className="flex flex-center content">
-            <div className="desktop">
-              <ValidatorsList route={route} validators={validators} />
-            </div>
-          </Content>
-          <Footer>
-            <NearFooter />
-          </Footer>
-        </Layout>
-      </AuthProvider>
+      <Layout>
+        <NearHeader 
+          title="Staking Rewards"
+          login={login}
+          requestSignIn={this.requestSignIn}
+          requestSignOut={this.requestSignOut}
+        />
+        <Content className="flex flex-center content">
+          <div className="desktop">
+            <MainContent
+              login={login}
+              validators={validators}
+            />
+          </div>
+        </Content>
+        <Footer>
+          <NearFooter />
+        </Footer>
+      </Layout>
     );
   }
 }
 
 App.propTypes = {
-  //
+  contract: PropTypes.object.isRequired,
+  wallet: PropTypes.object.isRequired
 };
-
-export default App;
