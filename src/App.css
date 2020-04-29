@@ -119,6 +119,7 @@ h3 {
 }
 
 .subheader-lg {
+  color: black;
   font-size: 22px;
   font-weight: bold;
   margin: 0;
@@ -126,6 +127,7 @@ h3 {
 }
 
 .subheader-md {
+  color: black;
   font-size: 18px;
   font-weight: bold;
   margin: 0;

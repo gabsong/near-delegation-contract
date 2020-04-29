@@ -13,6 +13,7 @@ export default class App extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      accountId: null,
       login: false,
       loading: true,
       validators: data,
@@ -42,7 +43,6 @@ export default class App extends Component {
     this.requestSignIn = this.requestSignIn.bind(this);
     this.signedInFlow = this.signedInFlow.bind(this);
     this.requestSignOut = this.requestSignOut.bind(this);
-    this.signedOutFlow = this.signedOutFlow.bind(this);
   }
 
   // componentDidMount
@@ -51,7 +51,7 @@ export default class App extends Component {
     if (loggedIn) {
       this.signedInFlow();
     } else {
-      this.signedOutFlow();
+      this.state.signOut();
     }
   }
 
@@ -65,26 +65,15 @@ export default class App extends Component {
   }
 
   async signedInFlow () {
-    console.log(this);
     this.state.signIn();
     const accountId = await this.props.wallet.getAccountId()
-    if (window.location.search.includes("account_id")) {
-      window.location.replace(window.location.origin + window.location.pathname)
-    }
+    this.setState(() => ({ accountId }));
   }
 
   requestSignOut () {
     this.props.wallet.signOut();
-    setTimeout(this.signedOutFlow, 500);
-    console.log("after sign out", this.props.wallet.isSignedIn())
-  }
-
-  signedOutFlow () {
-    console.log(this);
-    if (window.location.search.includes("account_id")) {
-      window.location.replace(window.location.origin + window.location.pathname)
-    }
     this.state.signOut();
+    console.log("after sign out, isSignedIn?", this.props.wallet.isSignedIn())
   }
 
   render () {
