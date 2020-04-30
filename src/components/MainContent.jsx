@@ -11,8 +11,10 @@ export default function MainContent ({ login, validators, stakes }) {
     // one has validators where the user has staked tokens (shown post login)
     // one has all available validators
   // Detail view only available post login
+  const headerText = login ? 'Dashboard' : 'Validators';
   return (
     <React.Fragment>
+      <h1>{headerText}</h1>
       {login && stakes.length > 0 &&
         <List className="list-primary">
           {stakes.map((validator) => (
@@ -46,7 +48,7 @@ export default function MainContent ({ login, validators, stakes }) {
           ))}
         </List>
       }
-      <List>
+      <List className="test" header="EXPLORE OTHER VALIDATORS">
         {validators.map((validator) => (
           <Item className="list-item" key={validator.account}>
             <Space size={19} direction="horizontal" className="flex align-center">
