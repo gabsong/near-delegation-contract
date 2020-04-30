@@ -7,6 +7,7 @@ import { Layout } from 'antd';
 import 'antd/dist/antd.min.css';
 import data from './data';
 import './App.css';
+import { getWalletBalance, getAccountId } from './utils/api';
 const { Content, Footer } = Layout;
 
 export default class App extends Component {
@@ -14,6 +15,13 @@ export default class App extends Component {
     super(props);
     this.state = {
       login: false,
+      accountId: null,
+      balance: null,
+      loading: true,
+      validators: data,
+      route: 'validators',
+      stakes: [data[0]],
+      // for Context API
       signIn: () => {
         console.log('setState invoked, signIn', this);
         this.setState(({ login }) => {
@@ -31,16 +39,12 @@ export default class App extends Component {
           }
         });
       },
-      loading: true,
-      validators: data,
-      route: 'validators'
     };
 
     // this bindings
     this.requestSignIn = this.requestSignIn.bind(this);
     this.signedInFlow = this.signedInFlow.bind(this);
     this.requestSignOut = this.requestSignOut.bind(this);
-    this.signedOutFlow = this.signedOutFlow.bind(this);
   }
 
   // componentDidMount
@@ -49,7 +53,7 @@ export default class App extends Component {
     if (loggedIn) {
       this.signedInFlow();
     } else {
-      this.signedOutFlow();
+      this.state.signOut();
     }
   }
 
@@ -63,30 +67,21 @@ export default class App extends Component {
   }
 
   async signedInFlow () {
-    console.log(this);
+    const { wallet } = this.props;
     this.state.signIn();
-    const accountId = await this.props.wallet.getAccountId()
-    if (window.location.search.includes("account_id")) {
-      window.location.replace(window.location.origin + window.location.pathname)
-    }
+    const accountId = getAccountId(wallet);
+    const balance = await getWalletBalance(wallet);
+    this.setState(() => ({ accountId, balance }));
   }
 
   requestSignOut () {
     this.props.wallet.signOut();
-    setTimeout(this.signedOutFlow, 500);
-    console.log("after sign out", this.props.wallet.isSignedIn())
-  }
-
-  signedOutFlow () {
-    console.log(this);
-    if (window.location.search.includes("account_id")) {
-      window.location.replace(window.location.origin + window.location.pathname)
-    }
     this.state.signOut();
+    console.log("after sign out, isSignedIn?", this.props.wallet.isSignedIn())
   }
 
   render () {
-    const { login, validators } = this.state;
+    const { login, accountId, balance, validators, stakes } = this.state;
     
     return (
       <Layout>
@@ -95,12 +90,15 @@ export default class App extends Component {
           login={login}
           requestSignIn={this.requestSignIn}
           requestSignOut={this.requestSignOut}
+          accountId={accountId}
+          balance={balance}
         />
         <Content className="flex flex-center content">
           <div className="desktop">
             <MainContent
               login={login}
               validators={validators}
+              stakes={stakes}
             />
           </div>
         </Content>
