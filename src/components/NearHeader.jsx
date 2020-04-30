@@ -5,8 +5,14 @@ import { CaretDownFilled } from '@ant-design/icons';
 import nearlogo from '../assets/gray_near_logo.svg';
 const { Item } = Menu;
 
-export default function NearHeader (props) {
-  const { title, login, requestSignIn, requestSignOut } = props;
+export default function NearHeader ({ 
+  title, 
+  login, 
+  requestSignIn, 
+  requestSignOut, 
+  accountId,
+  balance,
+}) {
   const menu = (
     <Menu>
       <Item>Settings</Item>
@@ -32,7 +38,7 @@ export default function NearHeader (props) {
               icon={<CaretDownFilled />}
               overlay={menu}
             >
-              @mynearaccount | &#9411; 2,895,9876
+              @{accountId} | &#9411; {Number.parseFloat(balance).toFixed(4)}
             </Dropdown.Button>
           </Space>
         }

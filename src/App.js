@@ -7,14 +7,16 @@ import { Layout } from 'antd';
 import 'antd/dist/antd.min.css';
 import data from './data';
 import './App.css';
+import { getWalletBalance, getAccountId } from './utils/api';
 const { Content, Footer } = Layout;
 
 export default class App extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      accountId: null,
       login: false,
+      accountId: null,
+      balance: null,
       loading: true,
       validators: data,
       route: 'validators',
@@ -65,9 +67,11 @@ export default class App extends Component {
   }
 
   async signedInFlow () {
+    const { wallet } = this.props;
     this.state.signIn();
-    const accountId = await this.props.wallet.getAccountId()
-    this.setState(() => ({ accountId }));
+    const accountId = getAccountId(wallet);
+    const balance = await getWalletBalance(wallet);
+    this.setState(() => ({ accountId, balance }));
   }
 
   requestSignOut () {
@@ -77,7 +81,7 @@ export default class App extends Component {
   }
 
   render () {
-    const { login, validators, stakes } = this.state;
+    const { login, accountId, balance, validators, stakes } = this.state;
     
     return (
       <Layout>
@@ -86,6 +90,8 @@ export default class App extends Component {
           login={login}
           requestSignIn={this.requestSignIn}
           requestSignOut={this.requestSignOut}
+          accountId={accountId}
+          balance={balance}
         />
         <Content className="flex flex-center content">
           <div className="desktop">
